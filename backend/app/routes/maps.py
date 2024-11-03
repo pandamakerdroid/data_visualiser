@@ -27,6 +27,6 @@ async def get_tile(dataset: str, z: int, x: int, y: int):
 async def process_geotiff(file: UploadFile = File(...)):
     try:
         response_data = map_service.save_and_process_geotiff(file)
-        return response_data
+        return JSONResponse({"map_url":response_data})
     except GeoTIFFProcessingError as e:
         raise HTTPException(status_code=500, detail=str(e))

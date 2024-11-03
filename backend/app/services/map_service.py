@@ -38,9 +38,7 @@ def save_and_process_geotiff(file):
         raise GeoTIFFProcessingError(f"Failed to process GeoTIFF: {e}")
     finally:
         os.remove(temp_file_path)
-    return {
-        "map_url": f"/maps/{Path(file.filename)}"
-    }
+    return f"/maps/{Path(file.filename)}"
 
 
 def create_tiles(input_path, output_folder, zoom_levels):
