@@ -1,0 +1,16 @@
+[map_settings]
+
+zoom_levels = "2-4"
+map_dir= "data/maps"
+api_prefix= "/maps"
+
+[csv_settings]
+
+csv_dir= "data/csvs"
+api_prefix= "/csvs"
+
+[app_settings]
+
+title= "Data Visualiser Backend"
+version= "0.1.0"
+api_prefix= "/api"
