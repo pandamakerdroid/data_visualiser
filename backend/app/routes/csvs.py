@@ -21,8 +21,8 @@ async def available_csvs():
 @csv_router.post("/upload")
 async def upload_csv(file: UploadFile = File(...)):
     try:
-        file_path = csv_service.save_csv(file)
-        return {"message": "File saved successfully", "file_path": file_path}
+        filename = csv_service.save_csv(file)
+        return {"message": "File saved successfully", "file_path":  f"{csv_settings.api_prefix}/{filename}"}
     except FileSaveError as e:
         raise HTTPException(status_code=500, detail=str(e))
 

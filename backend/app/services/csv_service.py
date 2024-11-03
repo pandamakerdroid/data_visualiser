@@ -25,7 +25,7 @@ def save_csv(file: UploadFile = File(...)):
         with open(file_path, "wb") as buffer:
             shutil.copyfileobj(file.file, buffer)
         
-        return file_path
+        return file.filename
     except (OSError, shutil.Error) as e:
         raise FileSaveError(f"Failed to save the file '{file.filename}': {e}")
 
