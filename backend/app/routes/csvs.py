@@ -12,10 +12,10 @@ os.makedirs(csv_settings.csv_dir, exist_ok=True)
 
 @csv_router.get("/all")
 async def available_csvs():
-    maps = csv_service.available_csvs()
-    if not maps:
+    csvs = csv_service.available_csvs()
+    if not csvs:
         return JSONResponse({"message": "No csvs available"}, status_code=404)
-    return JSONResponse({"maps": maps})
+    return JSONResponse({"csvs": csvs})
 
 
 @csv_router.post("/upload")
