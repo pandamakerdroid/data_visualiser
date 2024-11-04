@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import os
 import os.path
-from app.routes import map_router, csv_router
+from app.routes import auth_router,map_router, csv_router
 
 
 app = FastAPI()
@@ -13,6 +13,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+app.include_router(auth_router)
 app.include_router(map_router)
 app.include_router(csv_router)
 

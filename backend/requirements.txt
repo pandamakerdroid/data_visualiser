@@ -6,3 +6,5 @@ python-multipart==0.0.17
 azure-storage-blob==12.23.1
 python-jose==3.3.0
 matplotlib==3.9.2
+azure-storage-blob==12.23.1
+passlib==1.7.4

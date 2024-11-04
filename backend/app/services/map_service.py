@@ -1,45 +1,66 @@
+# app/services/map_service.py
+
 import os
 import tempfile
 import subprocess
 from pathlib import Path
+from azure.storage.blob import BlobServiceClient
 from app.exceptions import TileSetNotFoundError, GeoTIFFProcessingError
 from app.core.config import map_settings
-    
+import shutil
+
+# Initialize the BlobServiceClient with the SAS URL
+blob_service_client = BlobServiceClient(
+    account_url=map_settings.blob_account_url, 
+    credential=map_settings.blob_sas_token
+)
+container_name = map_settings.container_name
 
 def available_maps():
-    """Lists all available map directories."""
-    if not os.path.isdir(map_settings.map_dir):
-        return []
-
-    return [{"name": subdir.name, "url": f"{map_settings.api_prefix}/{subdir.name}"} for subdir in Path(map_settings.map_dir).iterdir() if subdir.is_dir()]
-
+    """Lists all available map directories in Azure Blob Storage."""
+    try:
+        container_client = blob_service_client.get_container_client(container_name)
+        blobs = container_client.list_blobs()
+        maps = {}
+        for blob in blobs:
+            dataset_name = blob.name.split('/')[0]
+            if dataset_name not in maps:
+                maps[dataset_name] = {
+                    "name": dataset_name,
+                    "url": f"/maps/{dataset_name}"
+                }
+        return list(maps.values())
+    except Exception as e:
+        raise GeoTIFFProcessingError(f"Failed to list available maps: {e}")
 
 def get_tile_path(dataset: str, z: int, x: int, y: int):
-    """Constructs the path for a specific tile and raises an exception if not found."""
-    tile_path = os.path.join(map_settings.map_dir, dataset, str(z), str(x), f"{y}.png")
-    if not os.path.isfile(tile_path):
-        raise TileSetNotFoundError("Tile not found")
-    return tile_path
+    """Constructs the URL for a specific tile in Azure Blob Storage."""
+    blob_name = f"{dataset}/{z}/{x}/{y}.png"
+    blob_url = f"{map_settings.blob_account_url}/{container_name}/{blob_name}?{map_settings.blob_sas_token}"
+    return blob_url
+
 
 
 def save_and_process_geotiff(file):
-    """Processes a GeoTIFF file and generates map tiles and a legend."""
-
+    """Processes a GeoTIFF file, generates map tiles, and uploads them to Azure Blob Storage."""
     with tempfile.NamedTemporaryFile(delete=False, suffix=".tif") as temp_file:
         temp_file.write(file.file.read())
         temp_file_path = temp_file.name
 
-    output_folder = os.path.join(map_settings.map_dir, Path(file.filename))
+    output_folder = Path(tempfile.mkdtemp())  # Temporary local folder for tiles
 
-    # create tileset
     try:
         create_tiles(temp_file_path, output_folder, map_settings.zoom_levels)
+        upload_tiles_to_azure(output_folder, Path(file.filename).stem)
     except Exception as e:
-        raise GeoTIFFProcessingError(f"Failed to process GeoTIFF: {e}")
+        raise GeoTIFFProcessingError(f"Failed to process and upload GeoTIFF: {e}")
     finally:
         os.remove(temp_file_path)
-    return f"/maps/{Path(file.filename)}"
-
+        # Clean up the entire temporary directory
+        shutil.rmtree(output_folder)
+        
+    return {"map_name":Path(file.filename).stem,
+            "map_url": f"/maps/{Path(file.filename).stem}"}
 
 def create_tiles(input_path, output_folder, zoom_levels):
     """Generates map tiles from a GeoTIFF file."""
@@ -54,7 +75,6 @@ def create_tiles(input_path, output_folder, zoom_levels):
         temp_8bit_path
     ], check=True)
 
-
     os.makedirs(output_folder, exist_ok=True)
     subprocess.run([
         "gdal2tiles.py",
@@ -65,3 +85,16 @@ def create_tiles(input_path, output_folder, zoom_levels):
     ], check=True)
 
     os.remove(temp_8bit_path)
+
+def upload_tiles_to_azure(local_tile_folder, dataset_name):
+    """Uploads all generated tiles in a local folder to Azure Blob Storage."""
+    container_client = blob_service_client.get_container_client(container_name)
+    for root, dirs, files in os.walk(local_tile_folder):
+        for file in files:
+            local_file_path = os.path.join(root, file)
+            relative_path = os.path.relpath(local_file_path, local_tile_folder)
+            blob_name = f"{dataset_name}/{relative_path.replace(os.path.sep, '/')}"
+
+            blob_client = container_client.get_blob_client(blob_name)
+            with open(local_file_path, "rb") as data:
+                blob_client.upload_blob(data, overwrite=True)

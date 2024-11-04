@@ -3,6 +3,9 @@
 zoom_levels = "2-4"
 map_dir= "data/maps"
 api_prefix= "/maps"
+container_name= "maps" 
+blob_account_url= "https://iiasainterviewsa.blob.core.windows.net"
+blob_sas_token= "sp=racwdl&st=2024-11-04T17:09:53Z&se=2024-12-31T01:09:53Z&sv=2022-11-02&sr=c&sig=pSmtSj1LMp6G%2Bj7LLWTd6fB6VYxgoF2WAP6yI6Vwu%2FA%3D"
 
 [csv_settings]
 
@@ -14,3 +17,7 @@ api_prefix= "/csvs"
 title= "Data Visualiser Backend"
 version= "0.1.0"
 api_prefix= "/api"
+
+[auth_settings]
+
+api_prefix= "/login"
