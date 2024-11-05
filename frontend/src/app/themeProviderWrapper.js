@@ -1,4 +1,4 @@
-"use client"; // Ensures this component is rendered on the client side
+'use client'; // Ensures this component is rendered on the client side
 
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 

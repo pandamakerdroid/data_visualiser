@@ -10,7 +10,6 @@ csv_router = APIRouter(prefix=f"{app_settings.api_prefix}{csv_settings.api_prefi
 
 os.makedirs(csv_settings.csv_dir, exist_ok=True)
 
-
 @csv_router.get("/all")
 async def available_csvs(current_user: dict = Depends(get_current_user)):
     """Endpoint to get all available csvs."""

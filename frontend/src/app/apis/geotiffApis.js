@@ -15,7 +15,7 @@ export async function fetchAvailableMaps() {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error("Error fetching available maps:", error);
+    console.error('Error fetching available maps:', error);
     throw error;
   }
 }
@@ -28,7 +28,7 @@ export async function uploadMap(formData) {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-        method: "POST",
+        method: 'POST',
         body: formData,
       }
     );
@@ -41,7 +41,7 @@ export async function uploadMap(formData) {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error("Error uploading map:", error);
+    console.error('Error uploading map:', error);
     throw error;
   }
 }

@@ -41,15 +41,15 @@ const App = () => {
     <Container>
       <TabContext value={value}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-          <TabList onChange={handleChange} aria-label="lab API tabs example">
-            <Tab label="CSV Visualiser" value="1" />
-            <Tab label="Geotiff Visualiser" value="2" />
+          <TabList onChange={handleChange} aria-label='lab API tabs example'>
+            <Tab label='CSV Visualiser' value='1' />
+            <Tab label='Geotiff Visualiser' value='2' />
           </TabList>
         </Box>
-        <TabPanel value="1">
+        <TabPanel value='1'>
           <CsvVisualiser />
         </TabPanel>
-        <TabPanel value="2">
+        <TabPanel value='2'>
           <GeoTiffVisualiser />
         </TabPanel>
       </TabContext>

@@ -1,7 +1,7 @@
 export async function fetchAvailableCsvs() {
   const token = sessionStorage.getItem('token');
   if (!token) {
-    throw new Error("token not found");
+    throw new Error('token not found');
   }
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/csvs/all`, {
@@ -15,7 +15,7 @@ export async function fetchAvailableCsvs() {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error("Error fetching available csvs:", error);
+    console.error('Error fetching available csvs:', error);
     throw error;
   }
 }
@@ -37,7 +37,7 @@ export async function fetchCsv(path) {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error("Error fetching csv:", error);
+    console.error('Error fetching csv:', error);
     throw error;
   }
 }
@@ -50,7 +50,7 @@ export async function uploadCsv(formData) {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-        method: "POST",
+        method: 'POST',
         body: formData,
       }
     );
@@ -64,7 +64,7 @@ export async function uploadCsv(formData) {
     console.log(data);
     return data;
   } catch (error) {
-    console.error("Error uploading csv:", error);
+    console.error('Error uploading csv:', error);
     throw error;
   }
 }

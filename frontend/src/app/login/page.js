@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Button, Container, FormControl, Typography, TextField } from '@mui/material';
+import { Button, Container, FormControl, Typography, TextField, Grid2 } from '@mui/material';
 import { login } from '../apis/loginApi';
 
 export default function Login() {
@@ -31,40 +31,69 @@ export default function Login() {
     }
   }, [token, router]);
 
+  const handleSetCredential = () => {
+    setUsername('testuser')
+    setPassword('password')
+  }
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
       const token = await login(username, password);
       setToken(token);
     } catch (error) {
-      alert("Login failed");
+      alert('Login failed');
     }
   };
 
   return (
-    <Container>
-      <FormControl style={{ width: 640, verticalAlign: 'middle' }}>
-        <Typography style={{ background: 'green' }} variant="h2">
+    <Container sx={{
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      height: '100vh',
+      flexDirection: 'column',
+    }}>
+      <FormControl sx={{ width: 640 }}>
+        <Typography sx={{ my: 2 }} component='h1' variant='h3'>
           Login
         </Typography>
         <TextField
-          placeholder="Username, use testuser"
+          placeholder='Username, use testuser'
+          value={username}
           onChange={(e) => setUsername(e.target.value)}
         />
         <TextField
-          type="password"
-          placeholder="Password, use password"
+          type='password'
+          value={password}
+          placeholder='Password, use password'
           onChange={(e) => setPassword(e.target.value)}
         />
-        <Button disabled={username.length < 3 || password.length < 3} onClick={handleLogin}>
-          Login
-        </Button>
+        <Grid2 container columns={2} sx={{ mt: 2 }} columnSpacing={2}>
+          <Grid2 size={1}>
+            <Button sx={{ width: '100%' }} variant='contained' onClick={handleSetCredential}>
+              Fillin preset credential
+            </Button>
+          </Grid2>
+          <Grid2 size={1}>
+            <Button sx={{ width: '100%' }} variant='contained'
+              disabled={username.length < 3 || password.length < 3} onClick={handleLogin}>
+              Login
+            </Button>
+          </Grid2>
+        </Grid2>
+
       </FormControl>
-      {token && countdown > 0 && (
-        <Typography variant="h6" style={{ marginTop: '20px', color: 'green' }}>
-          Redirecting in {countdown}...
-        </Typography>
-      )}
+      <Typography variant='h6' sx={{
+        height: 5,
+        mt: 1,
+        color: 'green',
+        width: '100%',
+        textAlign: 'center',
+        display: 'flex',
+        justifyContent: 'center',
+      }}>
+        {token && countdown > 0 && (`Redirecting in ${countdown}...`)}
+      </Typography>
     </Container>
   );
 }

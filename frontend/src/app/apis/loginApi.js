@@ -2,7 +2,7 @@ export async function login(username, password) {
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/login`, {
       headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
+        'Content-Type': 'application/x-www-form-urlencoded',
       },
       method: 'POST',
       body: new URLSearchParams({
