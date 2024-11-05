@@ -25,7 +25,7 @@ async def upload_csv(file: UploadFile = File(...), current_user: dict = Depends(
     """Endpoint to upload a csv."""
     try:
         filename = csv_service.save_csv(file)
-        return JSONResponse({"message": "File saved successfully", "csv_url":  f"{csv_settings.api_prefix}/{filename}"})
+        return JSONResponse({"message": "File saved successfully", "csv_name":  f"{filename}"})
     except FileSaveError as e:
         raise HTTPException(status_code=500, detail=str(e))
 

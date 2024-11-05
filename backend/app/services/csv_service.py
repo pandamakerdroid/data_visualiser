@@ -20,7 +20,7 @@ def available_csvs():
         blob_list = container_client.list_blobs()
 
         csv_files = [
-            {"name": blob.name, "url": f"{blob_service_client.url}/{container_name}/{blob.name}"}
+            {"name": blob.name}
             for blob in blob_list
             if blob.name.endswith('.csv')
         ]
