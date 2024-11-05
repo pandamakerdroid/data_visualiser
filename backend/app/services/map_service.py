@@ -1,11 +1,9 @@
-# app/services/map_service.py
-
 import os
 import tempfile
 import subprocess
 from pathlib import Path
 from azure.storage.blob import BlobServiceClient
-from app.exceptions import TileSetNotFoundError, GeoTIFFProcessingError
+from app.exceptions import GeoTIFFProcessingError
 from app.core.config import map_settings
 import shutil
 
@@ -27,7 +25,7 @@ def available_maps():
             if dataset_name not in maps:
                 maps[dataset_name] = {
                     "name": dataset_name,
-                    "url": f"/maps/{dataset_name}"
+                    "url": f"{map_settings.api_prefix}/{dataset_name}"
                 }
         return list(maps.values())
     except Exception as e:
@@ -60,7 +58,7 @@ def save_and_process_geotiff(file):
         shutil.rmtree(output_folder)
         
     return {"map_name":Path(file.filename).stem,
-            "map_url": f"/maps/{Path(file.filename).stem}"}
+            "map_url": f"{map_settings.api_prefix}/{Path(file.filename).stem}"}
 
 def create_tiles(input_path, output_folder, zoom_levels):
     """Generates map tiles from a GeoTIFF file."""
@@ -89,7 +87,7 @@ def create_tiles(input_path, output_folder, zoom_levels):
 def upload_tiles_to_azure(local_tile_folder, dataset_name):
     """Uploads all generated tiles in a local folder to Azure Blob Storage."""
     container_client = blob_service_client.get_container_client(container_name)
-    for root, dirs, files in os.walk(local_tile_folder):
+    for root, files in os.walk(local_tile_folder):
         for file in files:
             local_file_path = os.path.join(root, file)
             relative_path = os.path.relpath(local_file_path, local_tile_folder)

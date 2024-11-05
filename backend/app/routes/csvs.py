@@ -13,6 +13,7 @@ os.makedirs(csv_settings.csv_dir, exist_ok=True)
 
 @csv_router.get("/all")
 async def available_csvs(current_user: dict = Depends(get_current_user)):
+    """Endpoint to get all available csvs."""
     csvs = csv_service.available_csvs()
     if not csvs:
         return JSONResponse({"message": "No csvs available"}, status_code=404)
@@ -21,18 +22,19 @@ async def available_csvs(current_user: dict = Depends(get_current_user)):
 
 @csv_router.post("/upload")
 async def upload_csv(file: UploadFile = File(...), current_user: dict = Depends(get_current_user)):
+    """Endpoint to upload a csv."""
     try:
         filename = csv_service.save_csv(file)
-        return {"message": "File saved successfully", "file_path":  f"{csv_settings.api_prefix}/{filename}"}
+        return JSONResponse({"message": "File saved successfully", "csv_url":  f"{csv_settings.api_prefix}/{filename}"})
     except FileSaveError as e:
         raise HTTPException(status_code=500, detail=str(e))
 
 
 @csv_router.get("/{filename}")
 async def get_csv_content(filename: str, current_user: dict = Depends(get_current_user)):
-    file_path = f"{csv_settings.csv_dir}/{filename}"
+    """Endpoint to retrieve a specific csv, proxied through the backend."""
     try:
-        content = csv_service.read_csv(file_path)
-        return {"filename": filename, "content": content}
+        content = csv_service.read_csv(filename)
+        return JSONResponse({"filename": filename, "content": content})
     except FileReadError as e:
         raise HTTPException(status_code=404, detail=str(e))

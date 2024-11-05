@@ -43,6 +43,7 @@ export async function fetchCsv(path) {
 }
 
 export async function uploadCsv(formData) {
+  const token = sessionStorage.getItem('token');
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/csvs/upload`,
       {
@@ -60,6 +61,7 @@ export async function uploadCsv(formData) {
       throw new Error(`Failed to upload csv: ${response.statusText}`);
     }
     const data = await response.json();
+    console.log(data);
     return data;
   } catch (error) {
     console.error("Error uploading csv:", error);

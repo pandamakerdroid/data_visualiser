@@ -12,7 +12,10 @@ class MapsConfig(BaseSettings):
 class CsvConfig(BaseSettings):
     csv_dir: str
     api_prefix: str
-
+    container_name: str
+    blob_account_url: str
+    blob_sas_token: str
+    
 class AppConfig(BaseSettings):
     title: str
     version: str

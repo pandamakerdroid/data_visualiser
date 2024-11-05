@@ -11,6 +11,9 @@ blob_sas_token= "sp=racwdl&st=2024-11-04T17:09:53Z&se=2024-12-31T01:09:53Z&sv=20
 
 csv_dir= "data/csvs"
 api_prefix= "/csvs"
+container_name= "csvs"
+blob_account_url= "https://iiasainterviewsa.blob.core.windows.net"
+blob_sas_token= "sp=racwl&st=2024-11-05T09:55:42Z&se=2024-12-31T17:55:42Z&sv=2022-11-02&sr=c&sig=tmFYiEZz66zEmC0GsqAQaLTsRMX3%2F1w7imdFrKPtEtI%3D"
 
 [app_settings]
 
