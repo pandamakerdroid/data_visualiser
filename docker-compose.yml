@@ -1,13 +1,13 @@
 services:
   backend:
-    image: simincao/iiasa-interview-backend:latest
+    image: simincao/iiasa-interview-backend:1.0.0
     container_name: iiasa_interview_fastapi_backend
     ports:
       - "8000:8000"
     restart: always
 
   frontend:
-    image: simincao/iiasa-interview-frontend:latest
+    image: simincao/iiasa-interview-frontend:1.0.1
     container_name: iiasa_interview_react_frontend
     ports:
       - "3000:3000"
