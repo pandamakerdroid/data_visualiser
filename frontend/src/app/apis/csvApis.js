@@ -4,8 +4,8 @@ export async function fetchAvailableCsvs() {
     throw new Error("token not found");
   }
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/csvs/all`,{
-      headers:{
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/csvs/all`, {
+      headers: {
         Authorization: `Bearer ${token}`,
       },
     });
@@ -23,8 +23,8 @@ export async function fetchAvailableCsvs() {
 export async function fetchCsv(path) {
   const token = sessionStorage.getItem('token');
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}${path}`, {
-      headers:{
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/csvs/${path}`, {
+      headers: {
         Authorization: `Bearer ${token}`,
       },
     });
@@ -47,7 +47,7 @@ export async function uploadCsv(formData) {
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/csvs/upload`,
       {
-        headers:{
+        headers: {
           Authorization: `Bearer ${token}`,
         },
         method: "POST",

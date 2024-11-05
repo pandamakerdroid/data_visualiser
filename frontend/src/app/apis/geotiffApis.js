@@ -1,8 +1,8 @@
 export async function fetchAvailableMaps() {
   const token = sessionStorage.getItem('token');
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/maps/all`,{
-      headers:{
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/maps/all`, {
+      headers: {
         Authorization: `Bearer ${token}`,
       },
     });
@@ -25,11 +25,11 @@ export async function uploadMap(formData) {
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/maps/upload`,
       {
-          headers:{
-            Authorization: `Bearer ${token}`,
-          },
-          method: "POST",
-          body: formData,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        method: "POST",
+        body: formData,
       }
     );
     if (!response.ok) {

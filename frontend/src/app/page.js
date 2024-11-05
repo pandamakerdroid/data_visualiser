@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Login from '@/app/login/page';
 import { Container, Tab, Box } from '@mui/material';
 import dynamic from 'next/dynamic';
 import CsvVisualiser from './components/csvVisualiser';
@@ -31,11 +30,11 @@ const App = () => {
     }
   }, []);
 
-  useEffect(()=>{
+  useEffect(() => {
     if (!token) {
       router.push('/login');
     }
-  },[token])
+  }, [token])
 
 
   return (
@@ -47,10 +46,10 @@ const App = () => {
             <Tab label="Geotiff Visualiser" value="2" />
           </TabList>
         </Box>
-        <TabPanel value="1">        
+        <TabPanel value="1">
           <CsvVisualiser />
         </TabPanel>
-        <TabPanel value="2">        
+        <TabPanel value="2">
           <GeoTiffVisualiser />
         </TabPanel>
       </TabContext>
