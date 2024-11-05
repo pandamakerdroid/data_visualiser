@@ -6,17 +6,17 @@ class MapsConfig(BaseSettings):
     zoom_levels: str
     map_dir: str
     api_prefix: str
-    container_name: str = Field(..., env="MAP_AZ_CONTAINER_NAME")
-    blob_account_url: str = Field(..., env="MAP_AZ_BLOB_ACCOUNT")
-    blob_sas_token: str = Field(..., env="MAP_AZ_BLOB_SAS_TOKEN")
+    container_name: str
+    blob_account_url: str
+    blob_sas_token: str
 
 
 class CsvConfig(BaseSettings):
     csv_dir: str
     api_prefix: str
-    container_name: str = Field(..., env="CSV_AZ_CONTAINER_NAME")
-    blob_account_url: str = Field(..., env="CSV_AZ_BLOB_ACCOUNT")
-    blob_sas_token: str = Field(..., env="CSV_AZ_BLOB_SAS_TOKEN")
+    container_name: str
+    blob_account_url: str
+    blob_sas_token: str
 
 class AppConfig(BaseSettings):
     title: str

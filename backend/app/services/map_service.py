@@ -87,7 +87,7 @@ def create_tiles(input_path, output_folder, zoom_levels):
 def upload_tiles_to_azure(local_tile_folder, dataset_name):
     """Uploads all generated tiles in a local folder to Azure Blob Storage."""
     container_client = blob_service_client.get_container_client(container_name)
-    for root, files in os.walk(local_tile_folder):
+    for root, dirnames, files in os.walk(local_tile_folder):
         for file in files:
             local_file_path = os.path.join(root, file)
             relative_path = os.path.relpath(local_file_path, local_tile_folder)

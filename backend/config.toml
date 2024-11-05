@@ -3,17 +3,17 @@
 zoom_levels = "2-4"
 map_dir= "data/maps"
 api_prefix= "/maps"
-container_name= ""
-blob_account_url= ""
-blob_sas_token= ""
+container_name= "maps" 
+blob_account_url= "https://iiasainterviewsa.blob.core.windows.net"
+blob_sas_token= "sp=racwdl&st=2024-11-05T14:10:59Z&se=2024-12-31T22:10:59Z&sv=2022-11-02&sr=c&sig=s%2BnhiRMfI9NrYMdwfn%2FnESRaF8Y7aBzRUjiZ5gNHeWE%3D"
 
 [csv_settings]
 
 csv_dir= "data/csvs"
 api_prefix= "/csvs"
-container_name= ""
-blob_account_url= ""
-blob_sas_token= ""
+container_name= "csvs"
+blob_account_url= "https://iiasainterviewsa.blob.core.windows.net"
+blob_sas_token= "sp=racwl&st=2024-11-05T09:55:42Z&se=2024-12-31T17:55:42Z&sv=2022-11-02&sr=c&sig=tmFYiEZz66zEmC0GsqAQaLTsRMX3%2F1w7imdFrKPtEtI%3D"
 
 [app_settings]
 
