@@ -4,9 +4,11 @@ from passlib.context import CryptContext
 from app.services import user_service
 
 # Secret key and algorithm for JWT encoding/decoding
+# NOT FOR PROD!
 SECRET_KEY = "mock_secret_key_do_not_do_this_for_an_ACTUAL_APP!!"
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+#ACCESS TOKEN SHOULD HAVE VERY SHORT LIFE, THIS IS NOT FOR PROD!
+ACCESS_TOKEN_EXPIRE_MINUTES = 999
 
 # Password hashing context
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
