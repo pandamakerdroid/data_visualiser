@@ -96,8 +96,8 @@ const GeotiffVisualiser = () => {
       <Container>
         {loading && <Typography>Processing your file...</Typography>}
       </Container>
+      <Typography>For performance reason the leaflet and gdal zoom level is hard coded at 2-4.</Typography>
       <Container style={{ marginTop: '20px' }}>
-        <Typography>For performance reason the leaflet and gdal zoom level is hard coded at 2-4.</Typography>
         <Container id="map" style={{ height: '80vh', width: '100%', marginTop: '20px' }}></Container>
       </Container>
     </Container>
