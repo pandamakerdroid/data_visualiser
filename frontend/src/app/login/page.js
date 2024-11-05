@@ -2,34 +2,40 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Button, Container, FormControl, Typography,TextField } from '@mui/material';
+import { Button, Container, FormControl, Typography, TextField } from '@mui/material';
+import { login } from '../apis/loginApi';
 
 export default function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [token, setToken]=useState('');
+  const [token, setToken] = useState('');
+  const [countdown, setCountdown] = useState(3);
   const router = useRouter();
 
-  useEffect(()=>{
-    if(token!==undefined && token !==null){
+  useEffect(() => {
+    if (token !== undefined && token !== null && token !== '') {
       sessionStorage.setItem('token', token);
-    }
-  },[token])
 
-  const handleLogin = async () => {
+      // Start the countdown only if the token is set
+      if (sessionStorage.getItem('token') === token) {
+        const countdownInterval = setInterval(() => {
+          setCountdown((prevCountdown) => {
+            if (prevCountdown === 1) {
+              clearInterval(countdownInterval);
+              router.push('/'); // Redirect after countdown reaches 0
+            }
+            return prevCountdown - 1;
+          });
+        }, 1000);
+      }
+    }
+  }, [token, router]);
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
     try {
-      const response = await fetch('http://localhost:8000/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          username,
-          password,
-        }),
-      });
-      setToken(response.data.access_token);
-      router.push('/upload');
+      const token = await login(username, password);
+      setToken(token);
     } catch (error) {
       alert("Login failed");
     }
@@ -37,20 +43,28 @@ export default function Login() {
 
   return (
     <Container>
-      <FormControl style={{width:640, verticalAlign:'middle'}}>
-        <Typography style={{background:'green'}} variant='h2'>Login</Typography>
+      <FormControl style={{ width: 640, verticalAlign: 'middle' }}>
+        <Typography style={{ background: 'green' }} variant="h2">
+          Login
+        </Typography>
         <TextField
-          placeholder="Username"
+          placeholder="Username, use testuser"
           onChange={(e) => setUsername(e.target.value)}
         />
         <TextField
           type="password"
-          placeholder="Password"
+          placeholder="Password, use password"
           onChange={(e) => setPassword(e.target.value)}
         />
-        <Button disabled={username.length<3 || password.length<3} 
-        onClick={handleLogin}>Login</Button>
+        <Button disabled={username.length < 3 || password.length < 3} onClick={handleLogin}>
+          Login
+        </Button>
       </FormControl>
+      {token && countdown > 0 && (
+        <Typography variant="h6" style={{ marginTop: '20px', color: 'green' }}>
+          Redirecting in {countdown}...
+        </Typography>
+      )}
     </Container>
   );
 }

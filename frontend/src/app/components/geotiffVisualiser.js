@@ -5,14 +5,16 @@ import 'leaflet/dist/leaflet.css';
 import { Container, Typography,Input } from '@mui/material';
 import L from 'leaflet';
 import { fetchAvailableMaps, uploadMap } from '@/app/apis/geotiffApis';
-
+import { useRouter } from 'next/compat/router';
 
 const GeotiffVisualiser = () => {
   const [legendUrl, setLegendUrl] = useState(null);
   const [loading, setLoading] = useState(false);
   const mapRef = useRef(null);
   const [layerControl, setLayerControl]=useState(null);
-
+  const router = useRouter();
+  const token = sessionStorage.getItem('token');
+  
   useEffect(() => {
     if (!mapRef.current) {
 
@@ -40,9 +42,12 @@ const GeotiffVisualiser = () => {
     if(mapRef && mapRef.current && layerControl){
       async function fetchMaps(){
         const layers = await fetchAvailableMaps();
+        if (layers === 401) {
+          router.push('/login');
+        }
         if(layers && layers.maps){
           layers.maps.map(layer=>{
-            const tileLayer = L.tileLayer(`${process.env.NEXT_PUBLIC_API_BASE_URL}${layer.url}/{z}/{x}/{y}.png`, {
+            const tileLayer = L.tileLayer(`${process.env.NEXT_PUBLIC_API_BASE_URL}${layer.url}/{z}/{x}/{y}.png?token=${token}`, {
               tms: 1, 
               maxZoom: 4,
               minZoom: 2,
@@ -69,14 +74,16 @@ const GeotiffVisualiser = () => {
 
     try {
       const data = await uploadMap(formData);
-
+      if (data === 401) {
+        router.push('/login');
+      }
       const tileLayer = L.tileLayer(`${process.env.NEXT_PUBLIC_API_BASE_URL}${data.map_url}/{z}/{x}/{y}.png`, {
         tms: 1, 
         maxZoom: 4,
         minZoom: 2,
         attribution: ""
       })
-      layerControl.addOverlay(tileLayer, file.name);
+      layerControl.addOverlay(tileLayer, data.map_name);
     } catch (error) {
       console.error("Error processing GeoTIFF:", error);
       alert("Failed to process the GeoTIFF file");

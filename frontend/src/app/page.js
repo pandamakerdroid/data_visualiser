@@ -8,6 +8,7 @@ import CsvVisualiser from './components/csvVisualiser';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
+import { useRouter } from 'next/navigation';
 
 const GeoTiffVisualiser = dynamic(
   () => import('./components/geotiffVisualiser'),
@@ -15,6 +16,7 @@ const GeoTiffVisualiser = dynamic(
 )
 
 const App = () => {
+  const router = useRouter();
   const [data, setData] = useState([]);
   const [token, setToken] = useState('aaa');
   const [value, setValue] = useState('1');
@@ -24,11 +26,17 @@ const App = () => {
   useEffect(() => {
     const storedToken = sessionStorage.getItem('token');
     setToken(storedToken);
+    if (!token) {
+      router.push('/login');
+    }
   }, []);
 
-  if (!token) {
-    return <Login setToken={setToken} />;
-  }
+  useEffect(()=>{
+    if (!token) {
+      router.push('/login');
+    }
+  },[token])
+
 
   return (
     <Container>
