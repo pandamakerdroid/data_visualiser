@@ -1,30 +1,16 @@
-version: '3.8'
-
 services:
   backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-    image: simincao/iiasa-interview-frontend:latest
+    image: simincao/iiasa-interview-backend:latest
     container_name: iiasa_interview_fastapi_backend
     ports:
       - "8000:8000"
-    environment:
-      # IN PROD USE PIPELINE VARIABLES INSTEAD
-      MAP_AZ_BLOB_ACCOUNT: "https://iiasainterviewsa.blob.core.windows.net"
-      MAP_AZ_BLOB_SAS_TOKEN: "sp=racwdl&st=2024-11-04T17:09:53Z&se=2024-12-31T01:09:53Z&sv=2022-11-02&sr=c&sig=pSmtSj1LMp6G%2Bj7LLWTd6fB6VYxgoF2WAP6yI6Vwu%2FA%3D"
-      MAP_AZ_CONTAINER_NAME: "maps"
-      CSV_AZ_BLOB_ACCOUNT: "https://iiasainterviewsa.blob.core.windows.net"
-      CSV_AZ_BLOB_SAS_TOKEN: "sp=racwl&st=2024-11-05T09:55:42Z&se=2024-12-31T17:55:42Z&sv=2022-11-02&sr=c&sig=tmFYiEZz66zEmC0GsqAQaLTsRMX3%2F1w7imdFrKPtEtI%3D"
-      CSV_AZ_CONTAINER_NAME: "csvs"
+    restart: always
 
   frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    image: simincao/iiasa-interview-backend:latest
+    image: simincao/iiasa-interview-frontend:latest
     container_name: iiasa_interview_react_frontend
     ports:
       - "3000:3000"
     depends_on:
       - backend
+    restart: always
